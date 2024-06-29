@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Committee {
@@ -26,7 +26,7 @@ model Committee {
 model Event {
   id               String             @id @default(uuid())
   title            String
-  description      String             @db.LongText
+  description      String             @db.Text
   date             DateTime
   venue            String
   isArchived       Boolean
@@ -73,7 +73,7 @@ model Position {
 model Blog {
   id            String   @id @default(uuid())
   title         String
-  content       String   @db.LongText
+  content       String   @db.Text
   date          DateTime
   venue         String
   year          String
@@ -113,8 +113,8 @@ model NoticeBoard {
 
 model Faq {
   id        String   @id @default(uuid())
-  question  String   @db.LongText
-  answer    String    @db.LongText
+  question  String   @db.Text
+  answer    String    @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
