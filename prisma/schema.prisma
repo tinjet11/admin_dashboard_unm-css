@@ -24,40 +24,29 @@ model Committee {
 }
 
 model Event {
-  id               String             @id @default(uuid())
-  title            String
-  description      String             @db.Text
-  date             DateTime
-  venue            String
-  isArchived       Boolean
-  imageUrl         String
-  link             String
-  eventdescription EventDescription[]
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  id             String        @id @default(uuid())
+  title          String
+  description    String        @db.Text
+  date           DateTime
+  venue          String
+  isArchived     Boolean
+  imageUrl       String
+  link           String
+  eventContent   EventContent? @relation(fields: [eventContentId], references: [id], onDelete: Cascade)
+  eventContentId String? // Foreign key
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
-model EventDescription {
-  id                      String                    @id @default(uuid())
-  title                   String
-  order                   String
-  eventDescriptionContent EventDescriptionContent[]
-  eventId                 String
-  Event                   Event                     @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  createdAt               DateTime                  @default(now())
-  updatedAt               DateTime                  @updatedAt
+model EventContent {
+  id        String   @id @default(uuid())
+  content   String
+  eventId   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Event     Event[]
 
   @@index([eventId])
-}
-
-model EventDescriptionContent {
-  id                 String           @id @default(uuid())
-  description        String
-  order              String
-  eventDescriptionId String
-  EventDescription   EventDescription @relation(fields: [eventDescriptionId], references: [id], onDelete: Cascade)
-
-  @@index([eventDescriptionId])
 }
 
 model Position {
@@ -114,7 +103,7 @@ model NoticeBoard {
 model Faq {
   id        String   @id @default(uuid())
   question  String   @db.Text
-  answer    String    @db.Text
+  answer    String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
